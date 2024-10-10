@@ -7,23 +7,24 @@ using System.Threading.Tasks;
 
 namespace Mandatory2DGameFramework.model.defence
 {
-    public class DefenceItem:WorldObject
+    public class DefenceItem : WorldObject
     {
-        public string Name { get; set; }
-        public int ReduceHitPoint { get; set; }
-        public int DefenseValue { get; private set; }
+        public int DefenseValue { get; private set; }  // 防御值，用于减少受到的伤害
 
-
-        public DefenceItem()
+        // 构造函数
+        public DefenceItem(string name, int defenseValue, int x, int y)
+            : base(name, true, x, y)  // 传递给基类构造函数，防具物品是可拾取的
         {
-            Name = string.Empty;
-            ReduceHitPoint = 0;
+            DefenseValue = defenseValue;
         }
 
-
-        public override string ToString()
+        // 减少伤害的方法（可选）
+        public int ReduceDamage(int incomingDamage)
         {
-            return $"{{{nameof(Name)}={Name}, {nameof(ReduceHitPoint)}={ReduceHitPoint.ToString()}}}";
+            // 通过防御值减少伤害，确保最小伤害为0
+            return Math.Max(incomingDamage - DefenseValue, 0);
         }
     }
+
 }
+

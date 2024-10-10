@@ -19,50 +19,76 @@ namespace Mandatory2DGameFramework.model.Cretures
         public AttackItem?   Attack { get; set; }
         public DefenceItem?  Defence { get; set; }
 
-        public Creature()
+       
+        public int X { get; set; }
+        public int Y { get; set; }
+
+        public Creature(string name, int hitPoint, int x, int y)
         {
-            Name = string.Empty;
-            HitPoint = 100;
+            Name = name;
+            HitPoint = hitPoint;
+            X = x;
+            Y = y;
+        }
 
-            Attack = null;
-            Defence = null;
+        // 移动生物到新的位置
+        public void Move(int newX, int newY, World world)
+        {
+            if (world.IsPositionValid(newX, newY))
+            {
+                X = newX;
+                Y = newY;
+                Console.WriteLine($"{Name} 移动到了 ({X}, {Y})。");
 
+                // 检查是否有陷阱在当前位置
+                foreach (var obj in world.GetWorldObjectsAtPosition(X, Y))
+                {
+                    if (obj is HazardItem hazard)
+                    {
+                        hazard.ApplyDamage(this);
+                    }
+                }
+            }
         }
 
         public void Hit(Creature target)
         {
             if (Attack == null)
             {
-                Console.WriteLine($"{Name} 没有可用的攻击武器。");
+                Console.WriteLine($"{Name} har ikke et tilgængeligt angrebsvåben.");
                 return;
             }
 
             int damage = Attack.CalculateDamage();
             target.ReceiveHit(damage);
-            Console.WriteLine($"{Name} 使用 {Attack.Name} 攻击了 {target.Name}，造成了 {damage} 点伤害。");
+            Console.WriteLine($"{Name} angreb {target.Name} med {Attack.Name} og forårsagede {damage} skade.");
         }
 
-        // 受到攻击时的反应
+        // Reaktion på at blive angrebet
         public void ReceiveHit(int damage)
         {
             int reducedDamage = Defence != null ? damage - Defence.DefenseValue : damage;
-            reducedDamage = Math.Max(reducedDamage, 0);  // 确保伤害不会为负
+            reducedDamage = Math.Max(reducedDamage, 0);  // Sikre at skaden ikke er negativ
 
             HitPoint -= reducedDamage;
-            Console.WriteLine($"{Name} 受到了 {reducedDamage} 点伤害。剩余生命值：{HitPoint}");
+            Console.WriteLine($"{Name} modtog {reducedDamage} skade. Resterende livspoint: {HitPoint}");
 
             if (HitPoint <= 0)
             {
-                Console.WriteLine($"{Name} 已经死亡。");
+                Console.WriteLine($"{Name} er død.");
             }
         }
 
-        // 拾取物品
-        public void Loot(WorldObject obj)
+        // Looting af genstande
+        public void Loot(WorldObject obj, World world)
         {
             if (obj.Lootable)
             {
-                if (obj is AttackItem attackItem)
+                if (obj is BonusItem bonusItem)
+                {
+                    bonusItem.ApplyBonus(this);  // 应用奖励效果
+                }
+                else if (obj is AttackItem attackItem)
                 {
                     Attack = attackItem;
                     Console.WriteLine($"{Name} 拾取了攻击物品：{attackItem.Name}");
@@ -70,8 +96,11 @@ namespace Mandatory2DGameFramework.model.Cretures
                 else if (obj is DefenceItem defenceItem)
                 {
                     Defence = defenceItem;
-                    Console.WriteLine($"{Name} 拾取了防御物品：{defenceItem.Name}");
+                    Console.WriteLine($"{Name} 拾取了防具：{defenceItem.Name}");
                 }
+
+                // 从世界中移除该物品
+                world.RemoveWorldObject(obj);
             }
             else
             {
@@ -83,9 +112,12 @@ namespace Mandatory2DGameFramework.model.Cretures
 
 
 
+
+
+
         public override string ToString()
         {
-            return $"{{{nameof(Name)}={Name}, {nameof(HitPoint)}={HitPoint.ToString()}, {nameof(Attack)}={Attack}, {nameof(Defence)}={Defence}}}";
+            return $"{{{nameof(Name)}={Name}, {nameof(HitPoint)}={HitPoint.ToString()}}}";
         }
     }
 }
