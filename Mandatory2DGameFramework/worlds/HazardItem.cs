@@ -13,7 +13,7 @@ namespace Mandatory2DGameFramework.worlds
             public int Damage { get; private set; }
 
             public HazardItem(string name, int damage, int x, int y)
-                : base(name, false, x, y)  // 这个物品不可拾取
+                : base(name, false, x, y)  
             {
                 Damage = damage;
             }
@@ -21,7 +21,7 @@ namespace Mandatory2DGameFramework.worlds
             public void ApplyDamage(Creature creature)
             {
                 creature.ReceiveHit(Damage);
-                Console.WriteLine($"{creature.Name} 触发了 {Name} 并受到了 {Damage} 点伤害。");
+                Console.WriteLine($"{creature.Name} Triggered {Name} and took {Damage} damage。");
             }
         }
 

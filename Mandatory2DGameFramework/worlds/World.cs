@@ -32,11 +32,11 @@ namespace Mandatory2DGameFramework.worlds
             if (IsPositionValid(creature.X, creature.Y))
             {
                 creatures.Add(creature);
-                Console.WriteLine($"{creature.Name} blev tilføjet til verden på ({creature.X}, {creature.Y}).");
+                Console.WriteLine($"{creature.Name} was added to the world on ({creature.X}, {creature.Y}).");
             }
             else
             {
-                Console.WriteLine("Positionen er uden for verdenens grænser.");
+                Console.WriteLine("The position is outside the boundaries of the world.");
             }
         }
 
@@ -45,32 +45,24 @@ namespace Mandatory2DGameFramework.worlds
             if (IsPositionValid(obj.X, obj.Y))
             {
                 objects.Add(obj);
-                Console.WriteLine($"{obj.Name} blev tilføjet til verden på ({obj.X}, {obj.Y}).");
+                Console.WriteLine($"{obj.Name} was added to the world on ({obj.X}, {obj.Y}).");
             }
             else
             {
-                Console.WriteLine("Positionen er uden for verdenens grænser.");
+                Console.WriteLine("The position is outside the boundaries of the world.");
             }
         }
 
         public void RemoveWorldObject(WorldObject obj)
         {
             objects.Remove(obj);
-            Console.WriteLine($"{obj.Name} 已从世界中移除。");
+            Console.WriteLine($"{obj.Name} Removed from the world。");
         }
 
-        public List<WorldObject> GetWorldObjectsAtPosition(int x, int y)
+        public WorldObject? GetWorldObjectAtPosition(int x, int y)
         {
-            List<WorldObject> result = new List<WorldObject>();
-            foreach (var obj in objects)
-            {
-                if (obj.X == x && obj.Y == y)
-                {
-                    result.Add(obj);
-                }
-            }
-            return result;
+            return objects.FirstOrDefault(obj => obj.X == x && obj.Y == y);
         }
-    }
 
-}
+    }
+    }

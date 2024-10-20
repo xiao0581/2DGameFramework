@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Configuration>
+	
+	<World width="10" height="10" />
+
+	<Creatures>
+		<Creature type="Warrior" name="andres" hitPoints="100" x="2" y="3" />
+		<Creature type="Mage" name="morten" hitPoints="100" x="5" y="5" />
+	</Creatures>
+
+	
+	<Items>
+		<AttackItem name="Sword" attackPower="30" x="4" y="4" />
+		<DefenceItem name="Shield" defenseValue="15" x="6" y="6" />
+		<BonusItem name="Health Potion" bonusPoints="20" x="7" y="7" />
+		<HazardItem name="Trap" damage="25" x="5" y="5" />
+	</Items>
+
+	<Actions>
+		<Action type="Move" creatureName="andres" x="4" y="4" />
+		<Action type="Loot" creatureName="andres" x="4" y="4" />
+		<Action type="Move" creatureName="morten" x="7" y="7" />
+		<Action type="Move" creatureName="andres" x="7" y="7" />
+		<Action type="Hit" attackerName="andres" targetName="morten" />
+		<Action type="Hit" attackerName="andres" targetName="morten" />
+		<Action type="Hit" attackerName="andres" targetName="morten" />
+		<Action type="Hit" attackerName="andres" targetName="morten" />
+	</Actions>
+</Configuration>
+
+
+
+
+
+
+
+

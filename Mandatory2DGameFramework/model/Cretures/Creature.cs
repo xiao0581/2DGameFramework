@@ -6,118 +6,111 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Mandatory2DGameFramework.model.Cretures;
 namespace Mandatory2DGameFramework.model.Cretures
 {
-    public class Creature
+    public abstract class Creature
     {
         public string Name { get; set; }
         public int HitPoint { get; set; }
-
-
-        // Todo consider how many attack / defence weapons are allowed
-        public AttackItem?   Attack { get; set; }
-        public DefenceItem?  Defence { get; set; }
-
-       
+        public AttackItem? Attack { get; set; }
+        public DefenceItem? Defence { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
 
+        private ICreatureState currentState; // 当前状态
+
+        // 构造函数
         public Creature(string name, int hitPoint, int x, int y)
         {
             Name = name;
             HitPoint = hitPoint;
             X = x;
             Y = y;
+            currentState = new NormalState();  // 初始状态为正常状态
         }
 
-        // 移动生物到新的位置
-        public void Move(int newX, int newY, World world)
+        // 改变当前状态
+        public void ChangeState(ICreatureState newState)
         {
-            if (world.IsPositionValid(newX, newY))
-            {
-                X = newX;
-                Y = newY;
-                Console.WriteLine($"{Name} 移动到了 ({X}, {Y})。");
-
-                // 检查是否有陷阱在当前位置
-                foreach (var obj in world.GetWorldObjectsAtPosition(X, Y))
-                {
-                    if (obj is HazardItem hazard)
-                    {
-                        hazard.ApplyDamage(this);
-                    }
-                }
-            }
+            currentState = newState;
         }
 
-        public void Hit(Creature target)
-        {
-            if (Attack == null)
-            {
-                Console.WriteLine($"{Name} har ikke et tilgængeligt angrebsvåben.");
-                return;
-            }
-
-            int damage = Attack.CalculateDamage();
-            target.ReceiveHit(damage);
-            Console.WriteLine($"{Name} angreb {target.Name} med {Attack.Name} og forårsagede {damage} skade.");
-        }
-
-        // Reaktion på at blive angrebet
+        // 使用当前状态来处理收到的攻击
         public void ReceiveHit(int damage)
         {
-            int reducedDamage = Defence != null ? damage - Defence.DefenseValue : damage;
-            reducedDamage = Math.Max(reducedDamage, 0);  // Sikre at skaden ikke er negativ
+            currentState.ReceiveHit(this, damage);
+        }
 
-            HitPoint -= reducedDamage;
-            Console.WriteLine($"{Name} modtog {reducedDamage} skade. Resterende livspoint: {HitPoint}");
-
-            if (HitPoint <= 0)
+        // 模板方法：移动生物
+        public void Move(int newX, int newY, World world)
+        {
+            if (CanMove(newX, newY, world))
             {
-                Console.WriteLine($"{Name} er død.");
+                UpdatePosition(newX, newY);
+                OnMove();
             }
         }
 
-        // Looting af genstande
-        public void Loot(WorldObject obj, World world)
+        // 这些方法可以被子类覆盖，以实现不同的行为
+        protected virtual bool CanMove(int x, int y, World world)
+        {
+            return world.IsPositionValid(x, y);
+        }
+
+        protected virtual void UpdatePosition(int x, int y)
+        {
+            X = x;
+            Y = y;
+        }
+
+        protected virtual void OnMove()
+        {
+            Console.WriteLine($"{Name} moved to ({X}, {Y}).");
+        }
+
+        // 模板方法用于拾取物品
+        public virtual void Loot(WorldObject obj, World world)
         {
             if (obj.Lootable)
             {
                 if (obj is BonusItem bonusItem)
                 {
-                    bonusItem.ApplyBonus(this);  // 应用奖励效果
+                    bonusItem.ApplyBonus(this);
                 }
                 else if (obj is AttackItem attackItem)
                 {
                     Attack = attackItem;
-                    Console.WriteLine($"{Name} 拾取了攻击物品：{attackItem.Name}");
+                    Console.WriteLine($"{Name} picked up an attack item: {attackItem.Name}");
                 }
                 else if (obj is DefenceItem defenceItem)
                 {
                     Defence = defenceItem;
-                    Console.WriteLine($"{Name} 拾取了防具：{defenceItem.Name}");
+                    Console.WriteLine($"{Name} picked up armor: {defenceItem.Name}");
                 }
 
-                // 从世界中移除该物品
                 world.RemoveWorldObject(obj);
             }
             else
             {
-                Console.WriteLine($"{obj.Name} 不能被拾取。");
+                Console.WriteLine($"{obj.Name} cannot be picked up.");
             }
         }
 
-
-
-
-
-
-
-
-        public override string ToString()
+        // 攻击其他生物的方法
+        public void Hit(Creature target)
         {
-            return $"{{{nameof(Name)}={Name}, {nameof(HitPoint)}={HitPoint.ToString()}}}";
+            if (Attack == null)
+            {
+                Console.WriteLine($"{Name} can't attack because there is no attack item.");
+                return;
+            }
+
+            int damage = Attack.CalculateDamage();
+           
+            Console.WriteLine($"{Name} attacked {target.Name}, causing {damage} damage.");
+            target.ReceiveHit(damage);
         }
     }
+
 }
