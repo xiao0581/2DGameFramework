@@ -43,10 +43,11 @@ namespace Mandatory2DGameFramework.worlds
             }
         }
 
-        public void AddWorldObject(WorldObject obj)
+        public void AddWorldObject(string type, string name, int value, int x, int y)
         {
-            if (IsPositionValid(obj.X, obj.Y))
+            if (IsPositionValid(x, y))
             {
+                WorldObject obj = _worldObjectFactory.CreateWorldObject(type, name, value, x, y);
                 objects.Add(obj);
                 Console.WriteLine($"{obj.Name} was added to the world on ({obj.X}, {obj.Y}).");
             }
