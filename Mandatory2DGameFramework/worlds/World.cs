@@ -13,13 +13,15 @@ namespace Mandatory2DGameFramework.worlds
         private int height;
         private List<Creature> creatures;
         private List<WorldObject> objects;
+        private IWorldObjectFactory _worldObjectFactory; 
 
-        public World(int width, int height)
+        public World(int width, int height, IWorldObjectFactory factory)
         {
             this.width = width;
             this.height = height;
             creatures = new List<Creature>();
             objects = new List<WorldObject>();
+            _worldObjectFactory = factory; 
         }
 
         public bool IsPositionValid(int x, int y)

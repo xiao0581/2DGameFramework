@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mandatory2DGameFramework.worlds;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,9 @@ namespace Mandatory2DGameFramework.model.Cretures
 {
     public interface ICreatureState
     {
-        void ReceiveHit(Creature creature, int damage);
+        void ReceiveHit(Creature creature, int damage); 
+        void Attack(Creature attacker, Creature target); 
+        void Loot(Creature creature, WorldObject obj, World world); 
+        void Move(Creature creature, int x, int y, World world);
     }
 }

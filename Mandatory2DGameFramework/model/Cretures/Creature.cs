@@ -1,6 +1,4 @@
-﻿using Mandatory2DGameFramework.model.attack;
-using Mandatory2DGameFramework.model.defence;
-using Mandatory2DGameFramework.worlds;
+﻿using Mandatory2DGameFramework.worlds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,31 +16,42 @@ namespace Mandatory2DGameFramework.model.Cretures
         public int X { get; set; }
         public int Y { get; set; }
 
-        private ICreatureState currentState; // 当前状态
+        private ICreatureState currentState; // creature's current state
 
-        // 构造函数
+       
         public Creature(string name, int hitPoint, int x, int y)
         {
             Name = name;
             HitPoint = hitPoint;
             X = x;
             Y = y;
-            currentState = new NormalState();  // 初始状态为正常状态
+            currentState = new NormalState();  // initial state
         }
 
-        // 改变当前状态
+        // change the creature's state
         public void ChangeState(ICreatureState newState)
         {
             currentState = newState;
         }
 
-        // 使用当前状态来处理收到的攻击
         public void ReceiveHit(int damage)
         {
             currentState.ReceiveHit(this, damage);
         }
 
-        // 模板方法：移动生物
+        
+        public void Hit(Creature target)
+        {
+            currentState.Attack(this, target);
+        }
+
+        
+        public void Loot(WorldObject obj, World world)
+        {
+            currentState.Loot(this, obj, world);
+        }
+
+        // template method move 
         public void Move(int newX, int newY, World world)
         {
             if (CanMove(newX, newY, world))
@@ -52,7 +61,7 @@ namespace Mandatory2DGameFramework.model.Cretures
             }
         }
 
-        // 这些方法可以被子类覆盖，以实现不同的行为
+        // can override this method in subclasses
         protected virtual bool CanMove(int x, int y, World world)
         {
             return world.IsPositionValid(x, y);
@@ -68,49 +77,5 @@ namespace Mandatory2DGameFramework.model.Cretures
         {
             Console.WriteLine($"{Name} moved to ({X}, {Y}).");
         }
-
-        // 模板方法用于拾取物品
-        public virtual void Loot(WorldObject obj, World world)
-        {
-            if (obj.Lootable)
-            {
-                if (obj is BonusItem bonusItem)
-                {
-                    bonusItem.ApplyBonus(this);
-                }
-                else if (obj is AttackItem attackItem)
-                {
-                    Attack = attackItem;
-                    Console.WriteLine($"{Name} picked up an attack item: {attackItem.Name}");
-                }
-                else if (obj is DefenceItem defenceItem)
-                {
-                    Defence = defenceItem;
-                    Console.WriteLine($"{Name} picked up armor: {defenceItem.Name}");
-                }
-
-                world.RemoveWorldObject(obj);
-            }
-            else
-            {
-                Console.WriteLine($"{obj.Name} cannot be picked up.");
-            }
-        }
-
-        // 攻击其他生物的方法
-        public void Hit(Creature target)
-        {
-            if (Attack == null)
-            {
-                Console.WriteLine($"{Name} can't attack because there is no attack item.");
-                return;
-            }
-
-            int damage = Attack.CalculateDamage();
-           
-            Console.WriteLine($"{Name} attacked {target.Name}, causing {damage} damage.");
-            target.ReceiveHit(damage);
-        }
     }
-
 }

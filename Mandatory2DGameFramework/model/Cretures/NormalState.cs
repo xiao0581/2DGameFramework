@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mandatory2DGameFramework.worlds;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,9 +19,58 @@ namespace Mandatory2DGameFramework.model.Cretures
 
             if (creature.HitPoint <= 0)
             {
-                Console.WriteLine($"{creature.Name} is now dead.");
-                creature.ChangeState(new DeadState());  // 状态变为死亡状态
+                creature.ChangeState(new DeadState());
+            }
+        }
+
+        public void Attack(Creature attacker, Creature target)
+        {
+            if (attacker.Attack == null)
+            {
+                Console.WriteLine($"{attacker.Name} has no weapon to attack.");
+                return;
+            }
+
+            int damage = attacker.Attack.CalculateDamage();
+            Console.WriteLine($"{attacker.Name} attacked {target.Name}, causing {damage} damage.");
+            target.ReceiveHit(damage);
+        }
+
+        public void Loot(Creature creature, WorldObject obj, World world)
+        {
+            if (obj.Lootable)
+            {
+                if (obj is BonusItem bonusItem)
+                {
+                    bonusItem.ApplyBonus(creature);
+                }
+                else if (obj is AttackItem attackItem)
+                {
+                    creature.Attack = attackItem;
+                    Console.WriteLine($"{creature.Name} picked up an attack item: {attackItem.Name}");
+                }
+                else if (obj is DefenceItem defenceItem)
+                {
+                    creature.Defence = defenceItem;
+                    Console.WriteLine($"{creature.Name} picked up armor: {defenceItem.Name}");
+                }
+                world.RemoveWorldObject(obj);
+            }
+            else
+            {
+                Console.WriteLine($"{obj.Name} cannot be picked up.");
+            }
+        }
+
+        public void Move(Creature creature, int x, int y, World world)
+        {
+            if (world.IsPositionValid(x, y))
+            {
+                creature.X = x;
+                creature.Y = y;
+                Console.WriteLine($"{creature.Name} moved to ({creature.X}, {creature.Y})");
             }
         }
     }
 }
+
