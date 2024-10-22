@@ -1,4 +1,4 @@
-﻿using Mandatory2DGameFramework.model.Cretures;
+﻿using Mandatory2DGameFramework.Cretures;
 using Mandatory2DGameFramework.worlds;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace Mandatory2DGameFramework.model.state
+namespace Mandatory2DGameFramework.state
 {
     public class NormalState : ICreatureState
     {
@@ -53,7 +53,7 @@ namespace Mandatory2DGameFramework.model.state
                 else if (obj is DefenceItem defenceItem)
                 {
                     creature.Defence = defenceItem;
-                    Console.WriteLine($"{creature.Name} picked up armor: {defenceItem.Name}");
+                    Console.WriteLine($"{creature.Name} picked up armor: {defenceItem.Name}.Defense value: {defenceItem.DefenseValue}");
                 }
                 world.RemoveWorldObject(obj);
             }

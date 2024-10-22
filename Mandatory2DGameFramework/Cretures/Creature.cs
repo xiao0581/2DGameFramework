@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mandatory2DGameFramework.model.state;
-namespace Mandatory2DGameFramework.model.Cretures
+
+using Mandatory2DGameFramework.state;
+namespace Mandatory2DGameFramework.Cretures
 {
     public abstract class Creature
     {
@@ -18,7 +19,7 @@ namespace Mandatory2DGameFramework.model.Cretures
 
         private ICreatureState currentState; // creature's current state
 
-       
+
         public Creature(string name, int hitPoint, int x, int y)
         {
             Name = name;
@@ -39,13 +40,13 @@ namespace Mandatory2DGameFramework.model.Cretures
             currentState.ReceiveHit(this, damage);
         }
 
-        
+
         public void Hit(Creature target)
         {
             currentState.Attack(this, target);
         }
 
-        
+
         public void Loot(WorldObject obj, World world)
         {
             currentState.Loot(this, obj, world);

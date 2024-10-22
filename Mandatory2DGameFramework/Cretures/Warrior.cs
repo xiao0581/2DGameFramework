@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Mandatory2DGameFramework.model.Cretures
+namespace Mandatory2DGameFramework.Cretures
 {
-    public class Warrior: Creature
+    public class Warrior : Creature
     {
         public Warrior(string name, int hitPoint, int x, int y) : base(name, hitPoint, x, y)
         {

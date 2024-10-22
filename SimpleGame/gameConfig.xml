@@ -1,33 +1,72 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Configuration>
-	
-	<World width="10" height="10" />
+<GameConfig>
+	<World>
+		<Width>100</Width>
+		<Height>100</Height>
+	</World>
 
 	<Creatures>
-		<Creature type="Warrior" name="andres" hitPoints="100" x="2" y="3" />
-		<Creature type="Mage" name="morten" hitPoints="100" x="5" y="5" />
+		<Creature>
+			<Name>Morten</Name>
+			<Type>Warrior</Type>
+			<HitPoint>100</HitPoint>
+			<PositionX>2</PositionX>
+			<PositionY>3</PositionY>
+		</Creature>
+		<Creature>
+			<Name>Anders</Name>
+			<Type>Mage</Type>
+			<HitPoint>20</HitPoint>
+			<PositionX>1</PositionX>
+			<PositionY>1</PositionY>
+		</Creature>
 	</Creatures>
 
-	
-	<Items>
-		<AttackItem name="Sword" attackPower="30" x="4" y="4" />
-		<DefenceItem name="Shield" defenseValue="15" x="6" y="6" />
-		<BonusItem name="Health Potion" bonusPoints="20" x="7" y="7" />
-		<HazardItem name="Trap" damage="25" x="5" y="5" />
-	</Items>
+	<WorldObjects>
+		<WorldObject>
+			<Type>Attack</Type>
+			<Name>Sword</Name>
+			<Value>30</Value>
+			<PositionX>5</PositionX>
+			<PositionY>5</PositionY>
+		</WorldObject>
+		<WorldObject>
+			<Type>Defence</Type>
+			<Name>Shield</Name>
+			<Value>10</Value>
+			<PositionX>3</PositionX>
+			<PositionY>3</PositionY>
+		</WorldObject>
+		<WorldObject>
+			<Type>Hazard</Type>
+			<Name>Spike Trap</Name>
+			<Value>20</Value>
+			<PositionX>4</PositionX>
+			<PositionY>4</PositionY>
+		</WorldObject>
+		<WorldObject>
+			<Type>Bonus</Type>
+			<Name>Health Potion</Name>
+			<Value>30</Value>
+			<PositionX>2</PositionX>
+			<PositionY>2</PositionY>
+		</WorldObject>
+	</WorldObjects>
+
 
 	<Actions>
-		<Action type="Move" creatureName="andres" x="4" y="4" />
-		<Action type="Loot" creatureName="andres" x="4" y="4" />
-		<Action type="Move" creatureName="morten" x="7" y="7" />
-		<Action type="Move" creatureName="andres" x="7" y="7" />
-		<Action type="Hit" attackerName="andres" targetName="morten" />
-		<Action type="Hit" attackerName="andres" targetName="morten" />
-		<Action type="Hit" attackerName="andres" targetName="morten" />
-		<Action type="Hit" attackerName="andres" targetName="morten" />
+		<Action>
+			<Attacker>Morten</Attacker>
+			<Target>Anders</Target>
+			<Type>Attack</Type>
+		</Action>
+		<Action>
+			<Attacker>Morten</Attacker>
+			<Target>Anders</Target>
+			<Type>Attack</Type>
+		</Action>
 	</Actions>
-</Configuration>
-
+</GameConfig>
 
 
 
