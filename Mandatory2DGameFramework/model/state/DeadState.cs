@@ -1,11 +1,12 @@
-﻿using Mandatory2DGameFramework.worlds;
+﻿using Mandatory2DGameFramework.model.Cretures;
+using Mandatory2DGameFramework.worlds;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mandatory2DGameFramework.model.Cretures
+namespace Mandatory2DGameFramework.model.state
 {
     public class DeadState : ICreatureState
     {

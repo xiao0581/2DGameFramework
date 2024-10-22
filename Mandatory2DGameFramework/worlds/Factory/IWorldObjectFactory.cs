@@ -1,4 +1,4 @@
-﻿namespace Mandatory2DGameFramework.worlds
+﻿namespace Mandatory2DGameFramework.worlds.Factory
 {
     public interface IWorldObjectFactory
     {

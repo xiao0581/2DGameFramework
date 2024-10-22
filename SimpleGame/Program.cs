@@ -6,6 +6,7 @@ using Mandatory2DGameFramework.model.Cretures;
 using Mandatory2DGameFramework.model.attack;
 using Mandatory2DGameFramework.model.defence;
 using SimpleGame;
+using Mandatory2DGameFramework.worlds.Factory;
 
 IWorldObjectFactory factory = new WorldObjectFactory();
 World world = new World(10, 10, factory); 

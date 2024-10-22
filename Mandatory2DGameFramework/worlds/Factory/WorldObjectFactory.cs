@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mandatory2DGameFramework.worlds
+namespace Mandatory2DGameFramework.worlds.Factory
 {
     public class WorldObjectFactory : IWorldObjectFactory
     {
