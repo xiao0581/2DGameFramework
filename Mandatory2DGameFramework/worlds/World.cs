@@ -17,7 +17,7 @@ namespace Mandatory2DGameFramework.worlds
         private List<Creature> creatures;
         private List<WorldObject> objects;
         private IWorldObjectFactory _worldObjectFactory; 
-
+        private static readonly MyLogger logger = MyLogger.Instance;
 
         public World(int width, int height, IWorldObjectFactory factory)
         {
@@ -25,39 +25,35 @@ namespace Mandatory2DGameFramework.worlds
             this.height = height;
             creatures = new List<Creature>();
             objects = new List<WorldObject>();
-            _worldObjectFactory = factory; 
+            _worldObjectFactory = factory;
+            logger.LogInformation($"World created with width: {width} and height: {height}.");
         }
         public World()
         {
-            _worldObjectFactory = new WorldObjectFactory();  
-
-          
-            var config = GameConfigReader.Instance.GetConfig();
-
             
-            var worldConfig = config.Descendants("World").FirstOrDefault();
-            if (worldConfig != null)
-            {
-                width = int.Parse(worldConfig.Element("Width").Value);
-                height = int.Parse(worldConfig.Element("Height").Value);
+            _worldObjectFactory = new WorldObjectFactory(); // 内部创建工厂对象
 
-                creatures = new List<Creature>();
-                objects = new List<WorldObject>();
+            creatures = new List<Creature>();
+            objects = new List<WorldObject>();
 
-                Console.WriteLine($"World created with width: {width} and height: {height}");
-
-                InitializeFromConfig(config);
-            }
-            else
-            {
-                throw new Exception("World configuration not found in XML.");
-            }
+            // 使用 GameConfigReader 获取配置并初始化
+            var config = GameConfigReader.Instance.GetConfig();
+            InitializeFromConfig(config);
+            logger.Close();
         }
 
 
         private void InitializeFromConfig(XDocument config)
         {
-            
+            var worldConfig = config.Descendants("World").FirstOrDefault();
+            if (worldConfig != null)
+            {
+                width = int.Parse(worldConfig.Element("Width").Value);
+                height = int.Parse(worldConfig.Element("Height").Value);
+                Console.WriteLine($"World created with width: {width} and height: {height}");
+            }
+
+            // 初始化生物
             foreach (var creature in config.Descendants("Creature"))
             {
                 string name = creature.Element("Name").Value;
@@ -66,17 +62,14 @@ namespace Mandatory2DGameFramework.worlds
                 int x = int.Parse(creature.Element("PositionX").Value);
                 int y = int.Parse(creature.Element("PositionY").Value);
 
-                if (type == "Warrior")
+                Creature newCreature = CreateCreature(name, type, hitPoint, x, y);
+                if (newCreature != null)
                 {
-                    AddCreature(new Warrior(name, hitPoint, x, y));
-                }
-                else if (type == "Mage")
-                {
-                    AddCreature(new Mage(name, hitPoint, x, y));
+                    AddCreature(newCreature);
                 }
             }
 
-            
+            // 初始化物品
             foreach (var obj in config.Descendants("WorldObject"))
             {
                 string type = obj.Element("Type").Value;
@@ -88,62 +81,85 @@ namespace Mandatory2DGameFramework.worlds
                 AddWorldObject(_worldObjectFactory.CreateWorldObject(type, name, value, x, y));
             }
 
-
+            // 处理动作
             foreach (var action in config.Descendants("Action"))
             {
-                string attackerName = action.Element("Attacker").Value;
-                string actionType = action.Element("Type").Value;
-
-                Creature attacker = creatures.FirstOrDefault(c => c.Name == attackerName);
-
-                if (attacker == null)
-                {
-                    Console.WriteLine($"Creature {attackerName} not found.");
-                    continue;
-                }
-
-                if (actionType == "Move")
-                {
-                  
-                    int targetX = int.Parse(action.Element("PositionX").Value);
-                    int targetY = int.Parse(action.Element("PositionY").Value);
-
-                    attacker.CurrentState.Move(attacker, targetX, targetY, this);  
-                }
-                else if (actionType == "Loot")
-                {
-                   
-                    string targetName = action.Element("Target").Value;
-                    WorldObject targetObject = objects.FirstOrDefault(o => o.Name == targetName);
-
-                    if (targetObject != null)
-                    {
-                        attacker.Loot(attacker, targetObject, this); 
-                    }
-                    else
-                    {
-                        Console.WriteLine($"WorldObject {targetName} not found.");
-                    }
-                }
-                else if (actionType == "Attack")
-                {
-               
-                    string targetName = action.Element("Target").Value;
-                    Creature target = creatures.FirstOrDefault(c => c.Name == targetName);
-
-                    if (target != null)
-                    {
-                        attacker.CurrentState.Attack(attacker, target); 
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Creature {targetName} not found.");
-                    }
-                }
+                HandleAction(action);
             }
 
-            Console.WriteLine("World initialization completed.");
+          
         }
+
+        private void HandleAction(XElement actionElement)
+        {
+            string attackerName = actionElement.Element("Attacker").Value;
+            string actionType = actionElement.Element("Type").Value;
+
+            Creature attacker = creatures.FirstOrDefault(c => c.Name == attackerName);
+
+            if (attacker == null)
+            {
+                Console.WriteLine($"Creature {attackerName} not found.");
+                logger.LogWarning($"Failed to find creature {attackerName}.");
+                return;
+            }
+
+            if (actionType == "Move")
+            {
+                int targetX = int.Parse(actionElement.Element("PositionX").Value);
+                int targetY = int.Parse(actionElement.Element("PositionY").Value);
+                attacker.Move(targetX, targetY, this);
+            }
+            else if (actionType == "Loot")
+            {
+                string targetName = actionElement.Element("Target").Value;
+                WorldObject targetObject = objects.FirstOrDefault(o => o.Name == targetName);
+
+                if (targetObject != null)
+                {
+                    attacker.Loot(targetObject, this);
+                }
+                else
+                {
+                    Console.WriteLine($"WorldObject {targetName} not found.");
+                   logger.LogWarning($"Failed to loot {targetName}. Object not found.");
+                }
+            }
+            else if (actionType == "Attack")
+            {
+                string targetName = actionElement.Element("Target").Value;
+                Creature target = creatures.FirstOrDefault(c => c.Name == targetName);
+
+                if (target != null)
+                {
+                    attacker.Hit(target);
+                }
+                else
+                {
+                    Console.WriteLine($"Creature {targetName} not found.");
+                    logger.LogWarning($"Failed to attack {targetName}. Creature not found.");
+
+                }
+            }
+        }
+
+        private Creature CreateCreature(string name, string type, int hitPoint, int x, int y)
+        {
+            if (type == "Warrior")
+            {
+                return new Warrior(name, hitPoint, x, y);
+            }
+            else if (type == "Mage")
+            {
+                return new Mage(name, hitPoint, x, y);
+            }
+            else
+            {
+                Console.WriteLine($"Unknown creature type: {type}");
+                return null;
+            }
+        }
+
 
 
         public bool IsPositionValid(int x, int y)
@@ -154,14 +170,19 @@ namespace Mandatory2DGameFramework.worlds
 
         public void AddCreature(Creature creature)
         {
+            MyLogger logger = MyLogger.Instance;
             if (IsPositionValid(creature.X, creature.Y))
             {
                 creatures.Add(creature);
                 Console.WriteLine($"{creature.Name} was added to the world on ({creature.X}, {creature.Y}).");
+                logger.LogInformation($"{creature.Name} was added to the world at ({creature.X}, {creature.Y}).");
+
             }
             else
             {
                 Console.WriteLine("The position is outside the boundaries of the world.");
+                logger.LogWarning($"Failed to add {creature.Name}. Position ({creature.X}, {creature.Y}) is out of bounds.");
+
             }
         }
 
@@ -171,10 +192,14 @@ namespace Mandatory2DGameFramework.worlds
             {
                 objects.Add(obj);
                 Console.WriteLine($"{obj.Name} was added to the world at ({obj.X}, {obj.Y}).");
+                logger.LogInformation($"{obj.Name} was added to the world at ({obj.X}, {obj.Y}).");
+
             }
             else
             {
                 Console.WriteLine("The position is outside the boundaries of the world.");
+                logger.LogWarning($"Failed to add {obj.Name}. Position ({obj.X}, {obj.Y}) is out of bounds.");
+
             }
         }
 

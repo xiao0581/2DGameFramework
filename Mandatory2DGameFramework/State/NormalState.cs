@@ -1,4 +1,5 @@
 ﻿using Mandatory2DGameFramework.Cretures;
+using Mandatory2DGameFramework.Div;
 using Mandatory2DGameFramework.worlds;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,20 @@ namespace Mandatory2DGameFramework.state
 {
     public class NormalState : ICreatureState
     {
+        private static readonly MyLogger Logger = MyLogger.Instance;
         public void ReceiveHit(Creature creature, int damage)
         {
             int reducedDamage = Math.Max(damage - (creature.Defence?.DefenseValue ?? 0), 0);
             creature.HitPoint -= reducedDamage;
 
             Console.WriteLine($"{creature.Name} received {reducedDamage} damage. Remaining life points: {creature.HitPoint}");
+            Logger.LogInformation($"{creature.Name} received {reducedDamage} damage. Remaining life points: {creature.HitPoint}");
 
             if (creature.HitPoint <= 0)
             {
                 creature.ChangeState(new DeadState());
+                Console.WriteLine($"{creature.Name} has died.");
+                Logger.LogWarning($"{creature.Name} has died.");
             }
         }
 

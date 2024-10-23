@@ -10,7 +10,7 @@
 			<Name>Morten</Name>
 			<Type>Warrior</Type>
 			<HitPoint>100</HitPoint>
-			<PositionX>2</PositionX>
+			<PositionX>5</PositionX>
 			<PositionY>3</PositionY>
 		</Creature>
 		<Creature>
@@ -27,8 +27,8 @@
 			<Type>Attack</Type>
 			<Name>Sword</Name>
 			<Value>30</Value>
-			<PositionX>5</PositionX>
-			<PositionY>5</PositionY>
+			<PositionX>2</PositionX>
+			<PositionY>3</PositionY>
 		</WorldObject>
 		<WorldObject>
 			<Type>Defence</Type>
@@ -55,6 +55,17 @@
 
 
 	<Actions>
+		<Action>
+			<Attacker>Morten</Attacker>
+			<Type>Move</Type>
+			<PositionX>2</PositionX>
+			<PositionY>3</PositionY>
+		</Action>
+		<Action>
+			<Attacker>Morten</Attacker>
+			<Target>Sword</Target>
+			<Type>Loot</Type>
+		</Action>
 		<Action>
 			<Attacker>Morten</Attacker>
 			<Target>Anders</Target>
