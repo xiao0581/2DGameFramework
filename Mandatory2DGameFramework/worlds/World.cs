@@ -31,12 +31,12 @@ namespace Mandatory2DGameFramework.worlds
         public World()
         {
             
-            _worldObjectFactory = new WorldObjectFactory(); // 内部创建工厂对象
+            _worldObjectFactory = new WorldObjectFactory(); 
 
             creatures = new List<Creature>();
             objects = new List<WorldObject>();
 
-            // 使用 GameConfigReader 获取配置并初始化
+           
             var config = GameConfigReader.Instance.GetConfig();
             InitializeFromConfig(config);
             logger.Close();
@@ -69,7 +69,7 @@ namespace Mandatory2DGameFramework.worlds
                 }
             }
 
-            // 初始化物品
+          
             foreach (var obj in config.Descendants("WorldObject"))
             {
                 string type = obj.Element("Type").Value;
@@ -81,7 +81,7 @@ namespace Mandatory2DGameFramework.worlds
                 AddWorldObject(_worldObjectFactory.CreateWorldObject(type, name, value, x, y));
             }
 
-            // 处理动作
+         
             foreach (var action in config.Descendants("Action"))
             {
                 HandleAction(action);
