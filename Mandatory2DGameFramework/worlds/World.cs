@@ -19,6 +19,12 @@ namespace Mandatory2DGameFramework.worlds
         private IWorldObjectFactory _worldObjectFactory; 
         private static readonly MyLogger logger = MyLogger.Instance;
 
+        /// <summary>
+        /// Initializes a new instance of the World class with specified dimensions and a factory for creating world objects.
+        /// </summary>
+        /// <param name="width">The width of the world, representing the horizontal size of the game area.</param>
+        /// <param name="height">The height of the world, representing the vertical size of the game area.</param>
+        /// <param name="factory">An instance of IWorldObjectFactory used to create objects within the world.</param>
         public World(int width, int height, IWorldObjectFactory factory)
         {
             this.width = width;
@@ -28,6 +34,9 @@ namespace Mandatory2DGameFramework.worlds
             _worldObjectFactory = factory;
             logger.LogInformation($"World created with width: {width} and height: {height}.");
         }
+        /// <summary>
+        /// Default constructor for the World class, initializes world components and configures the world from a configuration file.
+        /// </summary>
         public World()
         {
             
@@ -42,8 +51,11 @@ namespace Mandatory2DGameFramework.worlds
             logger.Close();
         }
 
-
-        private void InitializeFromConfig(XDocument config)
+        /// <summary>
+        /// confread from config file
+        /// </summary>
+        /// <param name="config"></param>
+        public void InitializeFromConfig(XDocument config)
         {
             var worldConfig = config.Descendants("World").FirstOrDefault();
             if (worldConfig != null)
@@ -51,6 +63,7 @@ namespace Mandatory2DGameFramework.worlds
                 width = int.Parse(worldConfig.Element("Width").Value);
                 height = int.Parse(worldConfig.Element("Height").Value);
                 Console.WriteLine($"World created with width: {width} and height: {height}");
+                logger.LogInformation($"World created with width: {width} and height: {height}.");
             }
 
             // 初始化生物
@@ -89,8 +102,11 @@ namespace Mandatory2DGameFramework.worlds
 
           
         }
-
-        private void HandleAction(XElement actionElement)
+        /// <summary>
+        /// Initializes the World from a given XML configuration.
+        /// </summary>
+        /// <param name="config">The XML document containing world configuration data.</param>
+        public void HandleAction(XElement actionElement)
         {
             string attackerName = actionElement.Element("Attacker").Value;
             string actionType = actionElement.Element("Type").Value;
@@ -142,8 +158,16 @@ namespace Mandatory2DGameFramework.worlds
                 }
             }
         }
-
-        private Creature CreateCreature(string name, string type, int hitPoint, int x, int y)
+        /// <summary>
+        /// Creates a creature based on the provided type, name, hit points, and position.
+        /// </summary>
+        /// <param name="name">The name of the creature.</param>
+        /// <param name="type">The type of the creature (e.g., "Warrior", "Mage").</param>
+        /// <param name="hitPoint">The hit points of the creature.</param>
+        /// <param name="x">The x-coordinate of the creature's initial position.</param>
+        /// <param name="y">The y-coordinate of the creature's initial position.</param>
+        /// <returns>Returns a new instance of a Creature if the type is recognized, otherwise returns null.</returns>
+        public Creature CreateCreature(string name, string type, int hitPoint, int x, int y)
         {
             if (type == "Warrior")
             {

@@ -22,6 +22,7 @@ namespace Mandatory2DGameFramework.worlds.Factory
                     return new BonusItem(name, value, x, y);
                 default:
                     throw new ArgumentException("Invalid world object type");
+
             }
         }
     }

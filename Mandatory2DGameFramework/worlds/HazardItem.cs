@@ -1,4 +1,5 @@
 ﻿using Mandatory2DGameFramework.Cretures;
+using Mandatory2DGameFramework.Div;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,8 +12,8 @@ namespace Mandatory2DGameFramework.worlds
     {
         
             public int Damage { get; private set; }
-
-            public HazardItem(string name, int damage, int x, int y)
+         private static readonly MyLogger logger = MyLogger.Instance;
+        public HazardItem(string name, int damage, int x, int y)
                 : base(name, false, x, y)  
             {
                 Damage = damage;
@@ -22,6 +23,7 @@ namespace Mandatory2DGameFramework.worlds
             {
                 creature.ReceiveHit(Damage);
                 Console.WriteLine($"{creature.Name} Triggered {Name} and took {Damage} damage。");
+             logger.LogInformation($"{creature.Name} Triggered {Name} and took {Damage} damage。");
             }
         }
 

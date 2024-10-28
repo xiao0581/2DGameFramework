@@ -34,11 +34,13 @@ namespace Mandatory2DGameFramework.state
             if (attacker.Attack == null)
             {
                 Console.WriteLine($"{attacker.Name} has no weapon to attack.");
+                Logger.LogWarning($"{attacker.Name} has no weapon to attack.");
                 return;
             }
 
             int damage = attacker.Attack.CalculateDamage();
             Console.WriteLine($"{attacker.Name} attacked {target.Name}, causing {damage} damage.");
+            Logger.LogInformation($"{attacker.Name} attacked {target.Name}, causing {damage} damage.");
             target.ReceiveHit(damage);
         }
 
@@ -54,17 +56,20 @@ namespace Mandatory2DGameFramework.state
                 {
                     creature.Attack = attackItem;
                     Console.WriteLine($"{creature.Name} picked up an attack item: {attackItem.Name}");
+                    Logger.LogInformation($"{creature.Name} picked up an attack item: {attackItem.Name}");
                 }
                 else if (obj is DefenceItem defenceItem)
                 {
                     creature.Defence = defenceItem;
                     Console.WriteLine($"{creature.Name} picked up armor: {defenceItem.Name}.Defense value: {defenceItem.DefenseValue}");
+                    Logger.LogInformation($"{creature.Name} picked up armor: {defenceItem.Name}.Defense value: {defenceItem.DefenseValue}");
                 }
                 world.RemoveWorldObject(obj);
             }
             else
             {
                 Console.WriteLine($"{obj.Name} cannot be picked up.");
+                Logger.LogWarning($"{obj.Name} cannot be picked up.");
             }
         }
 
@@ -75,6 +80,7 @@ namespace Mandatory2DGameFramework.state
                 creature.X = x;
                 creature.Y = y;
                 Console.WriteLine($"{creature.Name} moved to ({creature.X}, {creature.Y})");
+                Logger.LogInformation($"{creature.Name} moved to ({creature.X}, {creature.Y})");
             }
         }
     }

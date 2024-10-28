@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Diagnostics;
 namespace Mandatory2DGameFramework.Div
 {
-    using System;
-    using System.Diagnostics;
-
-    using System.Diagnostics;
+   
 
     public class MyLogger
     {
@@ -70,6 +67,8 @@ namespace Mandatory2DGameFramework.Div
         {
             _traceSource.Close();
         }
+
+
     }
 
 

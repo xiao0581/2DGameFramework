@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Mandatory2DGameFramework.state;
+using Mandatory2DGameFramework.Div;
 namespace Mandatory2DGameFramework.Cretures
 {
     public abstract class Creature
@@ -16,6 +17,7 @@ namespace Mandatory2DGameFramework.Cretures
         public DefenceItem? Defence { get; set; }
         public int X { get; set; }
         public int Y { get; set; }
+        private static readonly MyLogger logger = MyLogger.Instance;
 
         private ICreatureState currentState; // creature's current state
 
@@ -77,6 +79,8 @@ namespace Mandatory2DGameFramework.Cretures
         protected virtual void OnMove()
         {
             Console.WriteLine($"{Name} moved to ({X}, {Y}).");
+            logger.LogInformation($"{Name} moved to ({X}, {Y}).");
+           
         }
     }
 }
