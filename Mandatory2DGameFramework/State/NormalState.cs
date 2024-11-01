@@ -21,7 +21,7 @@ namespace Mandatory2DGameFramework.state
         /// <param name="damage">The amount of damage.</param>
         public void ReceiveHit(Creature creature, int damage)
         {
-            int reducedDamage = Math.Max(damage - (creature.Defence?.DefenseValue ?? 0), 0);
+            int reducedDamage = damage - (creature.Defence?.DefenseValue ?? 0);
             creature.HitPoint -= reducedDamage;
 
             Console.WriteLine($"{creature.Name} received {reducedDamage} damage. Remaining life points: {creature.HitPoint}");
@@ -42,6 +42,12 @@ namespace Mandatory2DGameFramework.state
         /// <param name="target">The target creature.</param>
         public void Attack(Creature attacker, Creature target)
         {
+            if (attacker.X != target.X || attacker.Y != target.Y)
+            {
+                Console.WriteLine($"{attacker.Name} has no target to attack at ({attacker.X}, {attacker.Y}).");
+                Logger.LogWarning($"{attacker.Name} has no target to attack at ({attacker.X}, {attacker.Y}).");
+                return; 
+            }
             if (attacker.Attack == null)
             {
                 Console.WriteLine($"{attacker.Name} has no weapon to attack.");
@@ -63,8 +69,16 @@ namespace Mandatory2DGameFramework.state
         /// <param name="world">The world in which the creature exists.</param>
         public void Loot(Creature creature, WorldObject obj, World world)
         {
-            if (obj.Lootable)
+            
+            if (creature.X != obj.X || creature.Y != obj.Y)
             {
+                Console.WriteLine("No items to pick up.");
+                Logger.LogWarning("No items to pick up.");
+                return;
+            }
+            else if (obj.Lootable)
+            {
+              
                 if (obj is BonusItem bonusItem)
                 {
                     bonusItem.ApplyBonus(creature);
@@ -85,10 +99,13 @@ namespace Mandatory2DGameFramework.state
             }
             else
             {
+                
                 Console.WriteLine($"{obj.Name} cannot be picked up.");
                 Logger.LogWarning($"{obj.Name} cannot be picked up.");
             }
         }
+
+
 
         /// <summary>
         /// Handles the event when a creature in normal state moves to a new position.

@@ -11,7 +11,7 @@ namespace Mandatory2DGameFramework.state
 {
     public class DeadState : ICreatureState
     {
-        private static readonly MyLogger logger = MyLogger.Instance; /
+        private static readonly MyLogger logger = MyLogger.Instance; 
 
         /// <summary>
         /// Handles the event when a dead creature receives a hit.

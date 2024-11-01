@@ -12,6 +12,8 @@ namespace Mandatory2DGameFramework.Div
         private static GameConfigReader _instance;
         private XDocument _config;
 
+
+       
         
         public static GameConfigReader Instance
         {
@@ -25,7 +27,10 @@ namespace Mandatory2DGameFramework.Div
             }
         }
 
-       
+       /// <summary>
+       /// Initialize the config reader with a file path
+       /// </summary>
+       /// <param name="filePath">the file to read</param>
         public static void Initialize(string filePath)
         {
             if (_instance == null)
@@ -34,7 +39,7 @@ namespace Mandatory2DGameFramework.Div
             }
         }
 
-      
+    
         private GameConfigReader(string filePath)
         {
             _config = XDocument.Load(filePath);

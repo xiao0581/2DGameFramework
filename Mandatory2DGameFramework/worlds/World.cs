@@ -32,7 +32,8 @@ namespace Mandatory2DGameFramework.worlds
             creatures = new List<Creature>();
             objects = new List<WorldObject>();
             _worldObjectFactory = factory;
-            logger.LogInformation($"World created with width: {width} and height: {height}.");
+            Console.WriteLine($"World created with width: {width} and height: {height}");
+            
         }
         /// <summary>
         /// Default constructor for the World class, initializes world components and configures the world from a configuration file.
@@ -66,7 +67,7 @@ namespace Mandatory2DGameFramework.worlds
                 logger.LogInformation($"World created with width: {width} and height: {height}.");
             }
 
-            // 初始化生物
+           
             foreach (var creature in config.Descendants("Creature"))
             {
                 string name = creature.Element("Name").Value;
@@ -202,7 +203,7 @@ namespace Mandatory2DGameFramework.worlds
         /// <param name="creature">The creature to add.</param>
         public void AddCreature(Creature creature)
         {
-            MyLogger logger = MyLogger.Instance;
+           
             if (IsPositionValid(creature.X, creature.Y))
             {
                 creatures.Add(creature);

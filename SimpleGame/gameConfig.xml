@@ -38,13 +38,6 @@
 			<PositionY>3</PositionY>
 		</WorldObject>
 		<WorldObject>
-			<Type>Hazard</Type>
-			<Name>Spike Trap</Name>
-			<Value>20</Value>
-			<PositionX>4</PositionX>
-			<PositionY>4</PositionY>
-		</WorldObject>
-		<WorldObject>
 			<Type>Bonus</Type>
 			<Name>Health Potion</Name>
 			<Value>30</Value>
@@ -55,6 +48,31 @@
 
 
 	<Actions>
+		
+		
+		<Action>
+			<Attacker>Anders</Attacker>
+			<Type>Move</Type>
+			<PositionX>2</PositionX>
+			<PositionY>2</PositionY>
+		</Action>
+		<Action>
+			<Attacker>Anders</Attacker>
+			<Target>Health Potion</Target>
+			<Type>Loot</Type>
+		</Action>
+
+		<Action>
+			<Attacker>Anders</Attacker>
+			<Type>Move</Type>
+			<PositionX>3</PositionX>
+			<PositionY>3</PositionY>
+		</Action>
+		<Action>
+			<Attacker>Anders</Attacker>
+			<Target>Shield</Target>
+			<Type>Loot</Type>
+		</Action>
 		<Action>
 			<Attacker>Morten</Attacker>
 			<Type>Move</Type>
@@ -65,6 +83,12 @@
 			<Attacker>Morten</Attacker>
 			<Target>Sword</Target>
 			<Type>Loot</Type>
+		</Action>
+		<Action>
+			<Attacker>Morten</Attacker>
+			<Type>Move</Type>
+			<PositionX>3</PositionX>
+			<PositionY>3</PositionY>
 		</Action>
 		<Action>
 			<Attacker>Morten</Attacker>
