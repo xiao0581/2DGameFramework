@@ -12,7 +12,13 @@ namespace Mandatory2DGameFramework.state
 {
     public class NormalState : ICreatureState
     {
-        private static readonly MyLogger Logger = MyLogger.Instance;
+        private static readonly MyLogger Logger = MyLogger.Instance; // Logger instance
+
+        /// <summary>
+        /// Handles the event when a creature in normal state receives a hit.
+        /// </summary>
+        /// <param name="creature">The creature receiving the hit.</param>
+        /// <param name="damage">The amount of damage.</param>
         public void ReceiveHit(Creature creature, int damage)
         {
             int reducedDamage = Math.Max(damage - (creature.Defence?.DefenseValue ?? 0), 0);
@@ -29,6 +35,11 @@ namespace Mandatory2DGameFramework.state
             }
         }
 
+        /// <summary>
+        /// Handles the event when a creature in normal state attacks another creature.
+        /// </summary>
+        /// <param name="attacker">The attacking creature.</param>
+        /// <param name="target">The target creature.</param>
         public void Attack(Creature attacker, Creature target)
         {
             if (attacker.Attack == null)
@@ -44,6 +55,12 @@ namespace Mandatory2DGameFramework.state
             target.ReceiveHit(damage);
         }
 
+        /// <summary>
+        /// Handles the event when a creature in normal state loots a world object.
+        /// </summary>
+        /// <param name="creature">The looting creature.</param>
+        /// <param name="obj">The object to be looted.</param>
+        /// <param name="world">The world in which the creature exists.</param>
         public void Loot(Creature creature, WorldObject obj, World world)
         {
             if (obj.Lootable)
@@ -61,8 +78,8 @@ namespace Mandatory2DGameFramework.state
                 else if (obj is DefenceItem defenceItem)
                 {
                     creature.Defence = defenceItem;
-                    Console.WriteLine($"{creature.Name} picked up armor: {defenceItem.Name}.Defense value: {defenceItem.DefenseValue}");
-                    Logger.LogInformation($"{creature.Name} picked up armor: {defenceItem.Name}.Defense value: {defenceItem.DefenseValue}");
+                    Console.WriteLine($"{creature.Name} picked up armor: {defenceItem.Name}. Defense value: {defenceItem.DefenseValue}");
+                    Logger.LogInformation($"{creature.Name} picked up armor: {defenceItem.Name}. Defense value: {defenceItem.DefenseValue}");
                 }
                 world.RemoveWorldObject(obj);
             }
@@ -73,6 +90,13 @@ namespace Mandatory2DGameFramework.state
             }
         }
 
+        /// <summary>
+        /// Handles the event when a creature in normal state moves to a new position.
+        /// </summary>
+        /// <param name="creature">The moving creature.</param>
+        /// <param name="x">The new x-coordinate.</param>
+        /// <param name="y">The new y-coordinate.</param>
+        /// <param name="world">The world in which the creature exists.</param>
         public void Move(Creature creature, int x, int y, World world)
         {
             if (world.IsPositionValid(x, y))
