@@ -21,7 +21,10 @@ namespace Mandatory2DGameFramework.worlds
             Damage = damage;
         }
 
-
+        /// <summary>
+        /// Calculates and returns the damage value of the AttackItem.
+        /// </summary>
+        /// <returns>The damage value of the attack item.</returns>
         public int CalculateDamage()
         {
 

@@ -26,11 +26,21 @@ namespace Mandatory2DGameFramework.Div
                 return _instance;
             }
         }
+        /// <summary>
+        /// Private constructor that loads the configuration from the specified file path.
+        /// </summary>
+        /// <param name="filePath">The path to the XML configuration file.</param>
+        private GameConfigReader(string filePath)
+        {
+            _config = XDocument.Load(filePath);
+        }
 
-       /// <summary>
-       /// Initialize the config reader with a file path
-       /// </summary>
-       /// <param name="filePath">the file to read</param>
+
+        /// <summary>
+        /// Initializes the singleton instance of GameConfigReader with the specified file path.
+        /// </summary>
+        /// <param name="filePath">The path to the XML configuration file.</param>
+
         public static void Initialize(string filePath)
         {
             if (_instance == null)
@@ -39,13 +49,12 @@ namespace Mandatory2DGameFramework.Div
             }
         }
 
-    
-        private GameConfigReader(string filePath)
-        {
-            _config = XDocument.Load(filePath);
-        }
 
-        
+
+        /// <summary>
+        /// Gets the loaded configuration as an XDocument.
+        /// </summary>
+        /// <returns>The XDocument containing the configuration data.</returns>
         public XDocument GetConfig()
         {
             return _config;

@@ -19,7 +19,10 @@ namespace Mandatory2DGameFramework.worlds
             HealthBonus = healthBonus;
             
         }
-
+        /// <summary>
+        /// Applies the health bonus to the specified creature.
+        /// </summary>
+        /// <param name="creature">The creature to receive the health bonus.</param>
         public void ApplyBonus(Creature creature)
         {
          

@@ -17,7 +17,11 @@ namespace Mandatory2DGameFramework.worlds
             DefenseValue = defenseValue;
         }
 
-
+        /// <summary>
+        /// Reduces the incoming damage by the defense value.
+        /// </summary>
+        /// <param name="incomingDamage">The amount of damage to be reduced.</param>
+        /// <returns>The reduced damage value, ensuring it is not less than zero.</returns>
         public int ReduceDamage(int incomingDamage)
         {
 
