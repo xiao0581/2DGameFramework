@@ -185,13 +185,21 @@ namespace Mandatory2DGameFramework.worlds
         }
 
 
-
+        /// <summary>
+        /// Checks if the given position is valid within the world boundaries.
+        /// </summary>
+        /// <param name="x">The x-coordinate of the position.</param>
+        /// <param name="y">The y-coordinate of the position.</param>
+        /// <returns>True if the position is valid, otherwise false.</returns>
         public bool IsPositionValid(int x, int y)
         {
           
             return x >= 0 && y >= 0 && x < width && y < height;
         }
-
+        /// <summary>
+        /// Adds a creature to the world if its position is valid.
+        /// </summary>
+        /// <param name="creature">The creature to add.</param>
         public void AddCreature(Creature creature)
         {
             MyLogger logger = MyLogger.Instance;
@@ -209,7 +217,10 @@ namespace Mandatory2DGameFramework.worlds
 
             }
         }
-
+        /// <summary>
+        /// Adds a world object to the world if its position is valid.
+        /// </summary>
+        /// <param name="obj">The world object to add.</param>
         public void AddWorldObject(WorldObject obj)
         {
             if (IsPositionValid(obj.X, obj.Y))
@@ -226,13 +237,21 @@ namespace Mandatory2DGameFramework.worlds
 
             }
         }
-
+        /// <summary>
+        /// Removes a world object from the world.
+        /// </summary>
+        /// <param name="obj">The world object to remove.</param>
         public void RemoveWorldObject(WorldObject obj)
         {
             objects.Remove(obj);
             Console.WriteLine($"{obj.Name} Removed from the world。");
         }
-
+        /// <summary>
+        /// Gets the world object at the specified position.
+        /// </summary>
+        /// <param name="x">The x-coordinate of the position.</param>
+        /// <param name="y">The y-coordinate of the position.</param>
+        /// <returns>The world object at the specified position, or null if no object
         public WorldObject? GetWorldObjectAtPosition(int x, int y)
         {
             return objects.FirstOrDefault(obj => obj.X == x && obj.Y == y);
