@@ -19,7 +19,7 @@ namespace Mandatory2DGameFramework.Cretures
         public int Y { get; set; }
         private static readonly MyLogger logger = MyLogger.Instance;
 
-        private ICreatureState currentState; // creature's current state
+        private ICreatureState currentState; 
 
 
         public Creature(string name, int hitPoint, int x, int y)
