@@ -26,7 +26,7 @@
 		<WorldObject>
 			<Type>Attack</Type>
 			<Name>Sword</Name>
-			<Value>30</Value>
+			<Value>40</Value>
 			<PositionX>2</PositionX>
 			<PositionY>3</PositionY>
 		</WorldObject>

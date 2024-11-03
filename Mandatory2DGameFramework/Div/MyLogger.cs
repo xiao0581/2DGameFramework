@@ -51,7 +51,7 @@ namespace Mandatory2DGameFramework.Div
         /// <param name="message">The informational message to log.</param>
         public void LogInformation(string message)
         {
-            _traceSource.TraceEvent(TraceEventType.Information, 700, message);
+            _traceSource.TraceEvent(TraceEventType.Information, 300, message);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace Mandatory2DGameFramework.Div
         /// <param name="message">The warning message to log.</param>
         public void LogWarning(string message)
         {
-            _traceSource.TraceEvent(TraceEventType.Warning, 700, message);
+            _traceSource.TraceEvent(TraceEventType.Warning, 400, message);
         }
 
 
@@ -71,7 +71,7 @@ namespace Mandatory2DGameFramework.Div
 
         public void LogError(string message)
         {
-            _traceSource.TraceEvent(TraceEventType.Error, 700, message);
+            _traceSource.TraceEvent(TraceEventType.Error, 500, message);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Mandatory2DGameFramework.Div
         /// <param name="message">The critical message to log.</param>
         public void LogCritical(string message)
         {
-            _traceSource.TraceEvent(TraceEventType.Critical, 700, message);
+            _traceSource.TraceEvent(TraceEventType.Critical, 600, message);
         }
 
         /// <summary>
