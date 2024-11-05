@@ -12,7 +12,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 namespace Mandatory2DGameFramework.Div
 {
     public class GameConfigReader
-    {
+    {//fff
         private static GameConfigReader _instance;
         private XDocument _config;
         private static readonly MyLogger logger = MyLogger.Instance;
