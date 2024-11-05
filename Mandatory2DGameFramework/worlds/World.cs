@@ -13,12 +13,12 @@ namespace Mandatory2DGameFramework.worlds
 {
     public class World
     {
-        private int width;
-        private int height;
-        private List<Creature> creatures;
-        private List<WorldObject> objects;
-        private IWorldObjectFactory _worldObjectFactory; 
-        private static readonly MyLogger logger = MyLogger.Instance;
+        public int width;
+        public int height;
+        public List<Creature> creatures;
+        public List<WorldObject> objects;
+        public IWorldObjectFactory _worldObjectFactory; 
+        public static readonly MyLogger logger = MyLogger.Instance;
 
         /// <summary>
         /// Initializes a new instance of the World class with specified dimensions and a factory for creating world objects.
