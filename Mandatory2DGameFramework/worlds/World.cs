@@ -13,7 +13,7 @@ namespace Mandatory2DGameFramework.worlds
     public class World
     {
         private int width;
-        private int height;
+        private int height; 
         private List<Creature> creatures;
         private List<WorldObject> objects;
         private IWorldObjectFactory _worldObjectFactory; 

@@ -22,7 +22,9 @@ namespace Mandatory2DGameFramework.state
         public void ReceiveHit(Creature creature, int damage)
         {
             int reducedDamage = damage - (creature.Defence?.DefenseValue ?? 0);
-            creature.HitPoint -= reducedDamage;
+
+            // use Math.Max to ensure that the hit points are not negative
+            creature.HitPoint = Math.Max(creature.HitPoint - reducedDamage, 0);
 
             Console.WriteLine($"{creature.Name} received {reducedDamage} damage. Remaining life points: {creature.HitPoint}");
             Logger.LogInformation($"{creature.Name} received {reducedDamage} damage. Remaining life points: {creature.HitPoint}");
