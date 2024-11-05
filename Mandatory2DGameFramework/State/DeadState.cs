@@ -13,6 +13,7 @@ namespace Mandatory2DGameFramework.state
     {
         private static readonly MyLogger logger = MyLogger.Instance; 
 
+
         /// <summary>
         /// Handles the event when a dead creature receives a hit.
         /// </summary>
@@ -20,8 +21,10 @@ namespace Mandatory2DGameFramework.state
         /// <param name="damage">The amount of damage.</param>
         public void ReceiveHit(Creature creature, int damage)
         {
+
             Console.WriteLine($"{creature.Name} is dead and cannot be hit.");
             logger.LogInformation($"{creature.Name} is dead and cannot be hit.");
+
         }
 
         /// <summary>

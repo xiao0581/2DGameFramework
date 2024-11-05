@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Mandatory2DGameFramework.worlds
 {
     public class World
     {
         private int width;
-        private int height; 
+        private int height;
         private List<Creature> creatures;
         private List<WorldObject> objects;
         private IWorldObjectFactory _worldObjectFactory; 
@@ -40,150 +41,26 @@ namespace Mandatory2DGameFramework.worlds
         /// </summary>
         public World()
         {
-            
-            _worldObjectFactory = new WorldObjectFactory(); 
+
+            var factory = new WorldObjectFactory();
 
             creatures = new List<Creature>();
             objects = new List<WorldObject>();
+            var configReader = GameConfigReader.Instance;
+            (width, height) = configReader.GetWorldDimensions();
 
-           
-            var config = GameConfigReader.Instance.GetConfig();
-            InitializeFromConfig(config);
+
+
+            configReader.InitializeCreatures(this);
+            configReader.InitializeWorldObjects(this, factory);
+
+
+            configReader.InitializeActions(this);
+
             logger.Close();
+
         }
 
-        /// <summary>
-        /// confread from config file
-        /// </summary>
-        /// <param name="config"></param>
-        public void InitializeFromConfig(XDocument config)
-        {
-            var worldConfig = config.Descendants("World").FirstOrDefault();
-            if (worldConfig != null)
-            {
-                width = int.Parse(worldConfig.Element("Width").Value);
-                height = int.Parse(worldConfig.Element("Height").Value);
-                Console.WriteLine($"World created with width: {width} and height: {height}");
-                logger.LogInformation($"World created with width: {width} and height: {height}.");
-            }
-
-           
-            foreach (var creature in config.Descendants("Creature"))
-            {
-                string name = creature.Element("Name").Value;
-                string type = creature.Element("Type").Value;
-                int hitPoint = int.Parse(creature.Element("HitPoint").Value);
-                int x = int.Parse(creature.Element("PositionX").Value);
-                int y = int.Parse(creature.Element("PositionY").Value);
-
-                Creature newCreature = CreateCreature(name, type, hitPoint, x, y);
-                if (newCreature != null)
-                {
-                    AddCreature(newCreature);
-                }
-            }
-
-          
-            foreach (var obj in config.Descendants("WorldObject"))
-            {
-                string type = obj.Element("Type").Value;
-                string name = obj.Element("Name").Value;
-                int value = int.Parse(obj.Element("Value").Value);
-                int x = int.Parse(obj.Element("PositionX").Value);
-                int y = int.Parse(obj.Element("PositionY").Value);
-
-                AddWorldObject(_worldObjectFactory.CreateWorldObject(type, name, value, x, y));
-            }
-
-         
-            foreach (var action in config.Descendants("Action"))
-            {
-                HandleAction(action);
-            }
-
-          
-        }
-        /// <summary>
-        /// Initializes the World from a given XML configuration.
-        /// </summary>
-        /// <param name="config">The XML document containing world configuration data.</param>
-        public void HandleAction(XElement actionElement)
-        {
-            string attackerName = actionElement.Element("Attacker").Value;
-            string actionType = actionElement.Element("Type").Value;
-
-            Creature attacker = creatures.FirstOrDefault(c => c.Name == attackerName);
-
-            if (attacker == null)
-            {
-                Console.WriteLine($"Creature {attackerName} not found.");
-                logger.LogWarning($"Failed to find creature {attackerName}.");
-                return;
-            }
-
-            if (actionType == "Move")
-            {
-                int targetX = int.Parse(actionElement.Element("PositionX").Value);
-                int targetY = int.Parse(actionElement.Element("PositionY").Value);
-                attacker.Move(targetX, targetY, this);
-            }
-            else if (actionType == "Loot")
-            {
-                string targetName = actionElement.Element("Target").Value;
-                WorldObject targetObject = objects.FirstOrDefault(o => o.Name == targetName);
-
-                if (targetObject != null)
-                {
-                    attacker.Loot(targetObject, this);
-                }
-                else
-                {
-                    Console.WriteLine($"WorldObject {targetName} not found.");
-                   logger.LogWarning($"Failed to loot {targetName}. Object not found.");
-                }
-            }
-            else if (actionType == "Attack")
-            {
-                string targetName = actionElement.Element("Target").Value;
-                Creature target = creatures.FirstOrDefault(c => c.Name == targetName);
-
-                if (target != null)
-                {
-                    attacker.Hit(target);
-                }
-                else
-                {
-                    Console.WriteLine($"Creature {targetName} not found.");
-                    logger.LogWarning($"Failed to attack {targetName}. Creature not found.");
-
-                }
-            }
-        }
-        /// <summary>
-        /// Creates a creature based on the provided type, name, hit points, and position.
-        /// </summary>
-        /// <param name="name">The name of the creature.</param>
-        /// <param name="type">The type of the creature (e.g., "Warrior", "Mage").</param>
-        /// <param name="hitPoint">The hit points of the creature.</param>
-        /// <param name="x">The x-coordinate of the creature's initial position.</param>
-        /// <param name="y">The y-coordinate of the creature's initial position.</param>
-        /// <returns>Returns a new instance of a Creature if the type is recognized, otherwise returns null.</returns>
-        public Creature CreateCreature(string name, string type, int hitPoint, int x, int y)
-        {
-            if (type == "Warrior")
-            {
-                return new Warrior(name, hitPoint, x, y);
-            }
-            else if (type == "Mage")
-            {
-                return new Mage(name, hitPoint, x, y);
-            }
-            else
-            {
-                Console.WriteLine($"Unknown creature type: {type}");
-                return null;
-            }
-        }
 
 
         /// <summary>
@@ -259,4 +136,5 @@ namespace Mandatory2DGameFramework.worlds
         }
 
     }
+
     }

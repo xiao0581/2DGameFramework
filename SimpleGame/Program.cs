@@ -42,9 +42,9 @@ using Mandatory2DGameFramework.Div;
 
 
 
-GameConfigReader.Initialize("C:\\Users\\xiaohui\\Desktop\\4.SWC\\Mandatory2DGameFramework\\Mandatory2DGameFramework\\SimpleGame\\gameConfig.xml");
+//GameConfigReader.Initialize("C:\\Users\\xiaohui\\Desktop\\4.SWC\\Mandatory2DGameFramework\\Mandatory2DGameFramework\\SimpleGame\\gameConfig.xml");
 
-//GameConfigReader.Initialize("C:\\Users\\xiao\\source\\repos\\2DGameFramework\\SimpleGame\\gameConfig.xml");
+GameConfigReader.Initialize("C:\\Users\\xiao\\source\\repos\\2DGameFramework\\SimpleGame\\gameConfig.xml");
 
 World world = new World();
 
